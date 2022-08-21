@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Post;
+use App\Models\{Post, Category, User};
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -21,12 +21,25 @@ Route::get('/', function () {
 
 Route::get('/posts', function () {
     return view('posts', [
-        'posts' => Post::all()
+        'posts' => Post::with(['category', 'user'])->get()
     ]);
 });
 
-Route::get("/posts/{post}", function (Post $post) {
+Route::get("/posts/{post:slug}", function (Post $post) {
     return view('post', [
         'post' => $post
     ]);
 });
+Route::get("/categories/{category:slug}", function (Category $category) {
+    return view('categories', [
+        'category' => $category
+    ]);
+});
+
+Route::get(
+    "/users/{user}",
+    fn (User $user) =>
+    view('user', [
+        'user' => $user
+    ])
+);

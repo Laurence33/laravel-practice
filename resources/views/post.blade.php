@@ -1,4 +1,6 @@
 <x-layout>
+    @include('components/nav')
+
     <article>
         <h2> {{ $post->title }}</h2>
 
