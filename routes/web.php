@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\{Post, Category, User};
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
@@ -19,19 +20,9 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/posts', function () {
-    return view('posts', [
-        // 'posts' => Post::latest('published_at')->with(['category', 'user'])->get()
-        'posts' => Post::latest()->with(['category', 'user'])->get(),
-        'categories' => Category::all()
-    ]);
-})->name('posts');
+Route::get('/posts', [PostController::class, 'index'])->name('posts');
 
-Route::get("/posts/{post:slug}", function (Post $post) {
-    return view('post', [
-        'post' => $post->load('category', 'user')
-    ]);
-});
+Route::get("/posts/{post:slug}", [PostController::class, 'view'])->name('post');
 Route::get("/categories/{category:slug}", function (Category $category) {
     return view('categories', [
         'category' => $category->load('posts', 'posts.user'),
