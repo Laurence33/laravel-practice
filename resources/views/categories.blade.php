@@ -1,13 +1,10 @@
 <x-layout>
-    @include('components/nav')
-
-    <h1>Category {{ $category->name }}</h1>
-    <hr>
-    <h2>Posts</h2>
-    <ul>
-        @foreach ($category->posts as $post)
-            <li><a href="/posts/{{ $post->slug }}">{{ $post->title }}</a> By <a
-                    href="/users/{{ $post->user->id }}">{{ $post->user->name }}</a></li>
-        @endforeach
-    </ul>
+    @include('_post-header')
+    <main class="max-w-6xl mx-auto mt-6 lg:mt-20 space-y-6">
+        @if ($category->posts->count())
+            <x-posts-grid :posts="$category->posts" />
+        @else
+            <p class="text-center">No post yet, please check back later</p>
+        @endif
+    </main>
 </x-layout>

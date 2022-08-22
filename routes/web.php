@@ -17,29 +17,32 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/posts', function () {
     return view('posts', [
-        'posts' => Post::with(['category', 'user'])->get()
+        // 'posts' => Post::latest('published_at')->with(['category', 'user'])->get()
+        'posts' => Post::latest()->with(['category', 'user'])->get(),
+        'categories' => Category::all()
     ]);
-});
+})->name('posts');
 
 Route::get("/posts/{post:slug}", function (Post $post) {
     return view('post', [
-        'post' => $post
+        'post' => $post->load('category', 'user')
     ]);
 });
 Route::get("/categories/{category:slug}", function (Category $category) {
     return view('categories', [
-        'category' => $category
+        'category' => $category->load('posts', 'posts.user'),
+        'categories' => Category::all()
     ]);
-});
+})->name('categories');
 
 Route::get(
-    "/users/{user}",
+    "/users/{user:username}",
     fn (User $user) =>
     view('user', [
-        'user' => $user
+        'user' => $user->load('posts')
     ])
-);
+)->name('users');

@@ -12,6 +12,8 @@ class Post extends Model
     protected $fillable = ["title", "excerpt", "body"];
     // $guarded -> define properties not allowed to be filled
 
+    // protected $with = ['user', 'category']; // Eager loading
+
 
     // public function getRouteKeyName()
     // {
